@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wall</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style>
+    *{
+        /* outline: 1px dotted red; */
+    }
+    .error{
+        color: red;
+    }
+    .main{
+        background-color: antiquewhite;
+    }
+    .messages{
+        background-color: beige;
+    }
+    .comment{
+        margin-left: 50px;
+        background-color:azure;
+    }
+    textarea{
+        width: 500px;
+        display: block;
+    }
+    input{
+        margin: 5px;
+    }
+    </style>
+
+</head>
+<body>
+    <div class="wrapper">
+        <h1>The Wall</h1>
+        <h5>hello {{ session['first_name'] }}, user_id= {{ session['user_id'] }} <a href='/logout'>logout</a></h5>
+        <div class="main">
+            <h3>Post a message </h3>
+            
+            <form action='/message' method="POST">
+                <textarea name="content"> </textarea>
+                <input type="hidden" name="message_id" value="">
+                <input type="submit" value="post message">
+            </form>
+            
+            <div class="messages">
+
+
+                {% for message in messages %}
+                    
+                    <h5>msg by name={{ message.user_first_name }} (user id= {{message.message_user_id}}) msg id= {{ message.message_id }}, -- {{message.message_created_at}} </h5>
+                    <p>{{ message.message_content }}</p>
+                    
+                    
+                    <div class="comment">
+
+                        {% for comment in comments %}
+                        {% if message.message_id == comment.comment_message_id %}
+                        
+                        <p>p</p>                        
+                       
+                        
+                        <p>comment msg id = {{comment.comment_message_id}} -- {{ comment.comment_created_at }}</p>
+                        <p> {{ comment.comment_content }} .</p>
+                        
+                        
+                        {% endif %}
+                        {% endfor %}
+                        <form action='/comment' method="POST">
+                            <textarea name="comment"> </textarea>
+                            <input type="hidden" name="message_id" value="{{ message.message_id }}">
+                            <input type="submit" value="post comment">
+                        </form>
+                        
+
+                    </div>
+                {% endfor %}
+            
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
